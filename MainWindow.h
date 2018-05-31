@@ -13,6 +13,7 @@
 #include <QCloseEvent>
 #include <QSignalMapper>
 #include <BluetoothToolsApplication.h>
+#include "Forms/BlueToothScanForm.h"
 
 class MainWindow: public QMainWindow
 {
@@ -22,27 +23,39 @@ class MainWindow: public QMainWindow
 public:
     MainWindow(QWidget *parent = 0);
     ~MainWindow();
-
-    void initPrimaryInterface();
     void createMenus();
-    void manageMenu(bool);
-
 
 protected:
     void closeEvent(QCloseEvent *event);
-
+    void setScanState(bool state);
 
 public slots:
     void quitTriggered();
     void aboutTriggered();
-
+    void startScanner();
+    void stopScanner();
+    void scanTypeLEChecked();
+    void scanTypeClassicChecked();
+    void saveData();
 
 
 private:
     QMenu *m_fileMenu;
     QMenu *m_helpMenu;
+    QMenu *m_ScanMenu;
+    QMenu *m_DataMenu;
+    QAction *m_saveAction;
     QAction *m_quitAction;
     QAction *m_aboutAction;
+    QAction *m_LE;
+    QAction *m_Classic;
+    QAction *m_startScan;
+    QAction *m_stopScan;
+    QActionGroup *m_scanTypeGroup;
+
+    BlueToothScanForm *_mainForm;
+    ScanType _current = ScanType::NONE;
+    bool _scanning = false;
 };
 
 

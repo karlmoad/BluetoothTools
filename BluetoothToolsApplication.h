@@ -17,9 +17,15 @@ namespace BluetoothToolsApplication {
     const QString AppTitle = "BlueToothTools";
     const QString FileExtension = ".btt";
     const QStringList FileExtensionWildcard = QStringList("*.btt");
+    const QString Scanning = "%1 scan running";
+    const QString Stopped ="No scanner is currently running";
 }
 
-
+enum class ScanType{
+    CLASSIC=0,
+    LE=1,
+    NONE=100
+};
 
 
 

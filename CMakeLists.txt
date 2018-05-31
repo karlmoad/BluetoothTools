@@ -17,10 +17,11 @@ set(CMAKE_AUTORCC ON)
 
 find_package(Qt5 COMPONENTS Core Widgets REQUIRED)
 
-add_executable(BluetoothTools main.cpp
+add_executable(BluetoothTools MACOSX_BUNDLE main.cpp
                                 resources.qrc
                                 MainWindow.cpp MainWindow.h
-                                BluetoothToolsApplication.h)
+                                BluetoothToolsApplication.h
+                                Forms/BlueToothScanForm.cpp Forms/BlueToothScanForm.h)
 
 target_link_libraries(BluetoothTools Qt5::Core Qt5::Widgets)
 
