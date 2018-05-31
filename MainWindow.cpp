@@ -5,22 +5,33 @@
 #include "MainWindow.h"
 
 MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
+
+
+    this->_devices = QMap<QString, QBluetoothDeviceInfo>();
+    this->_rssiHistory = QMap<QString, QList<RSSIData>>();
+
     this->setMinimumSize(1366, 768);
     this->setWindowTitle(BluetoothToolsApplication::AppTitle);
     this->setWindowIcon(QIcon(":/images/bluetooth_32.png"));
     this->menuBar()->setNativeMenuBar(true);
     this->menuBar()->setEnabled(true);
     this->setStatusBar(new QStatusBar(this));
-    this->_mainForm = new BlueToothScanForm(this);
+    this->_mainForm = new BlueToothScanForm(&_devices, &_rssiHistory,this);
     this->setCentralWidget(_mainForm);
     this->createMenus();
     this->setScanState(false);
+
+    this->_agent = new QBluetoothDeviceDiscoveryAgent();
+    this->_agent->setLowEnergyDiscoveryTimeout(0); //continually scan until stopped
 }
 
-MainWindow::~MainWindow() {}
+MainWindow::~MainWindow() {
+    delete(_agent);
+}
 
 void MainWindow::closeEvent(QCloseEvent *event) {
     QWidget::closeEvent(event);
+    _agent->stop();
     event->accept();
 }
 
@@ -101,7 +112,8 @@ void MainWindow::startScanner() {
 
 void MainWindow::stopScanner() {
     if(_scanning) {
-        setScanState(false);
+        setStatusTip(BluetoothToolsApplication::Stopping);
+        _agent->stop();
     }
 }
 
@@ -133,5 +145,25 @@ void MainWindow::setScanState(bool state) {
                         : BluetoothToolsApplication::Stopped);
     _scanning=state;
 
+}
+
+void MainWindow::onDeviceScanned(const QBluetoothDeviceInfo &info) {
+    QString id = Utility::getDeviceId(info);
+    _devices[id] = info;
+    RSSIData rssi = {QDateTime::currentMSecsSinceEpoch(), info.rssi()};
+
+    if(!_rssiHistory.contains(id)) {
+        _rssiHistory.insert(id, QList<RSSIData>());
+    }
+    _rssiHistory[id].append(rssi);
+    emit notifyDeviceInfoAvailable(id);
+};
+
+void MainWindow::deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error) {
+    setStatusTip(QString("Discovery Agent Error: %1").arg(_agent->errorString()));
+}
+
+void MainWindow::scanFinished() {
+    setScanState(false);
 }
 

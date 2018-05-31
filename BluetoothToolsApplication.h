@@ -7,8 +7,6 @@
 
 #include <QString>
 
-
-
 namespace BluetoothToolsApplication {
 
     const QString OrgName = "koad.io";
@@ -17,7 +15,8 @@ namespace BluetoothToolsApplication {
     const QString AppTitle = "BlueToothTools";
     const QString FileExtension = ".btt";
     const QStringList FileExtensionWildcard = QStringList("*.btt");
-    const QString Scanning = "%1 scan running";
+    const QString Scanning = "%1 scan running ...";
+    const QString Stopping = "Scanner stopping ...";
     const QString Stopped ="No scanner is currently running";
 }
 
@@ -27,6 +26,10 @@ enum class ScanType{
     NONE=100
 };
 
+struct RSSIData {
+    qint64 epoch;
+    qint16 rssi;
+};
 
 
 #endif //BLUETOOTHTOOLS_BLUETOOTHTOOLSAPPLICATION_H

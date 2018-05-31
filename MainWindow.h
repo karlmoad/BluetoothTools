@@ -12,8 +12,15 @@
 #include <QSettings>
 #include <QCloseEvent>
 #include <QSignalMapper>
+#include <QBluetoothDeviceInfo>
+#include <QBluetoothDeviceDiscoveryAgent>
+#include <QBluetoothUuid>
+#include <QMap>
+#include <QList>
+#include <QDateTime>
 #include <BluetoothToolsApplication.h>
 #include "Forms/BlueToothScanForm.h"
+#include "Utility.h"
 
 class MainWindow: public QMainWindow
 {
@@ -37,7 +44,12 @@ public slots:
     void scanTypeLEChecked();
     void scanTypeClassicChecked();
     void saveData();
+    void onDeviceScanned(const QBluetoothDeviceInfo &info);
+    void deviceScanError(QBluetoothDeviceDiscoveryAgent::Error error);
+    void scanFinished();
 
+signals:
+    void notifyDeviceInfoAvailable(QString const &id);
 
 private:
     QMenu *m_fileMenu;
@@ -56,6 +68,10 @@ private:
     BlueToothScanForm *_mainForm;
     ScanType _current = ScanType::NONE;
     bool _scanning = false;
+
+    QBluetoothDeviceDiscoveryAgent *_agent;
+    QMap<QString, QBluetoothDeviceInfo> _devices;
+    QMap<QString, QList<RSSIData>> _rssiHistory;
 };
 
 
