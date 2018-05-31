@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>images/bluetooth_16.png</file>
+        <file>images/bluetooth_24.png</file>
+        <file>images/bluetooth_32.png</file>
+        <file>images/bluetooth_64.png</file>
+        <file>images/bluetooth_128.png</file>
+        <file>images/bluetooth_256.png</file>
+        <file>images/bluetooth_512.png</file>
+    </qresource>
+</RCC>
