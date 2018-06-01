@@ -25,6 +25,8 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
     this->setScanState(false);
 
     this->_agent = new QBluetoothDeviceDiscoveryAgent();
+    connect(_agent, &QBluetoothDeviceDiscoveryAgent::deviceDiscovered, this, &MainWindow::onDeviceScanned);
+    connect(_agent, &QBluetoothDeviceDiscoveryAgent::finished, this, &MainWindow::scanFinished);
     this->_agent->setLowEnergyDiscoveryTimeout(0); //continually scan until stopped
 }
 
@@ -131,6 +133,11 @@ void MainWindow::stopScanner() {
     if(_scanning) {
         setStatusTip(BluetoothToolsApplication::Stopping);
         _agent->stop();
+
+
+        if(!_agent->isActive()) {
+            setScanState(false);
+        }
     }
 }
 

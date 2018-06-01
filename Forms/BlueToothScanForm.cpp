@@ -24,7 +24,7 @@ void BlueToothScanForm::onDeviceInformationAvailable(QString const &id) {
             loadDeviceData(id);
         }
         else {
-            _index[id]->setBackgroundColor(QColor(0,0,255,125));
+            _index[id]->setBackgroundColor(QColor(0,255,0,75));
         }
     }
     else {
@@ -48,6 +48,4 @@ void BlueToothScanForm::onOpenDevice(const QListWidgetItem *clicked) {
 
 void BlueToothScanForm::loadDeviceData(QString const &id) {
     _index[id]->setBackgroundColor(QColor(255,255,255,255));
-
-
 }
