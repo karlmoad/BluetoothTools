@@ -35,7 +35,7 @@ void BlueToothScanForm::onDeviceInformationAvailable(QString const &id) {
 
 void BlueToothScanForm::onOpenDevice(const QListWidgetItem *clicked) {
     if(clicked != nullptr) {
-        DeviceListItem *item = dynamic_cast<DeviceListItem*>(clicked);
+        const DeviceListItem *item = dynamic_cast<const DeviceListItem*>(clicked);
         bool locked = _mutex.try_lock();
         if(locked) {
             _currentDeviceIdentifier = item->getIdentifier();
