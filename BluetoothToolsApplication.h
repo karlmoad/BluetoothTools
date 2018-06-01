@@ -11,11 +11,11 @@ namespace BluetoothToolsApplication {
 
     const QString OrgName = "koad.io";
     const QString OrgDomain = "koad.io";
-    const QString AppName = "BlueToothTools";
-    const QString AppTitle = "BlueToothTools";
+    const QString AppName = "BluetoothTools";
+    const QString AppTitle = "BluetoothTools";
     const QString FileExtension = ".btt";
     const QStringList FileExtensionWildcard = QStringList("*.btt");
-    const QString Scanning = "%1 scan running ...";
+    const QString Scanning = "Scanning for %1 devices ...";
     const QString Stopping = "Scanner stopping ...";
     const QString Stopped ="No scanner is currently running";
 }

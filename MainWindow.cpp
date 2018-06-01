@@ -16,8 +16,11 @@ MainWindow::MainWindow(QWidget *parent): QMainWindow(parent) {
     this->menuBar()->setNativeMenuBar(true);
     this->menuBar()->setEnabled(true);
     this->setStatusBar(new QStatusBar(this));
+
     this->_mainForm = new BlueToothScanForm(&_devices, &_rssiHistory,this);
+    connect(this, &MainWindow::notifyDeviceInfoAvailable, _mainForm, &BlueToothScanForm::onDeviceInformationAvailable);
     this->setCentralWidget(_mainForm);
+
     this->createMenus();
     this->setScanState(false);
 
@@ -40,7 +43,7 @@ void MainWindow::quitTriggered() {
 }
 
 void MainWindow::aboutTriggered() {
-    QMessageBox::information(this, "About", "BlueToothTools   By Karl Moad");
+    QMessageBox::information(this, "About", "BluetoothTools   By Karl Moad");
 }
 
 void MainWindow::createMenus() {
@@ -78,11 +81,11 @@ void MainWindow::createMenus() {
     //Scanner menu
     this->m_startScan = new QAction("Start Scanner", this);
     this->m_stopScan = new QAction("Stop Scanner", this);
-    this->m_LE = new QAction("BlueTooth LE Scan", this);
+    this->m_LE = new QAction("Bluetooth LE Scan", this);
     this->m_LE->setCheckable(true);
     this->m_LE->setChecked(false);
     this->m_scanTypeGroup->addAction(m_LE);
-    this->m_Classic = new QAction("BlueTooth classic scan", this);
+    this->m_Classic = new QAction("Bluetooth standard scan", this);
     this->m_Classic->setCheckable(true);
     this->m_Classic->setChecked(false);
     this->m_scanTypeGroup->addAction(m_Classic);
@@ -103,7 +106,21 @@ void MainWindow::createMenus() {
 void MainWindow::startScanner() {
     if(!_scanning) {
         if (_current != ScanType::NONE) {
-            setScanState(true);
+            switch(_current) {
+                case ScanType::LE:{
+                    _agent->start(QBluetoothDeviceDiscoveryAgent::LowEnergyMethod);
+                }
+                case ScanType::CLASSIC: {
+                    _agent->start(QBluetoothDeviceDiscoveryAgent::ClassicMethod);
+                }
+                default: {
+                    break;
+                }
+            }
+
+            if(_agent->isActive()) {
+                setScanState(true);
+            }
         } else {
             QMessageBox::critical(this, "Error", "You must first select a scan type and try again");
         }
@@ -141,7 +158,7 @@ void MainWindow::setScanState(bool state) {
     m_startScan->setEnabled(!state);
     m_stopScan->setEnabled(state);
     setStatusTip( state ?
-                  (BluetoothToolsApplication::Scanning.arg((_current == ScanType::LE ? "BlueTooth LE" : "BlueTooth Classic")))
+                  (BluetoothToolsApplication::Scanning.arg((_current == ScanType::LE ? "Bluetooth LE" : "Bluetooth Standard")))
                         : BluetoothToolsApplication::Stopped);
     _scanning=state;
 

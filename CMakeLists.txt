@@ -22,7 +22,7 @@ add_executable(BluetoothTools MACOSX_BUNDLE main.cpp
                                 MainWindow.cpp MainWindow.h
                                 BluetoothToolsApplication.h
                                 Forms/BlueToothScanForm.cpp Forms/BlueToothScanForm.h
-                                Utility.cpp Utility.h)
+                                Utility.cpp Utility.h DeviceListItem.cpp DeviceListItem.h)
 
 target_link_libraries(BluetoothTools Qt5::Core Qt5::Widgets Qt5::Bluetooth)
 
