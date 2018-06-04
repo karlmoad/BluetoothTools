@@ -85,9 +85,10 @@ void MainWindow::createMenus() {
     this->m_stopScan = new QAction("Stop Scanner", this);
     this->m_LE = new QAction("Bluetooth LE Scan", this);
     this->m_LE->setCheckable(true);
-    this->m_LE->setChecked(false);
+    this->m_LE->setChecked(true);
     this->m_scanTypeGroup->addAction(m_LE);
-    this->m_Classic = new QAction("Bluetooth standard scan", this);
+    this->m_Classic = new QAction("Bluetooth standard scan (Coming Soon)", this);
+    this->m_Classic->setEnabled(false);
     this->m_Classic->setCheckable(true);
     this->m_Classic->setChecked(false);
     this->m_scanTypeGroup->addAction(m_Classic);

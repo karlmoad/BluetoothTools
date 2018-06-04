@@ -15,6 +15,8 @@ BlueToothScanForm::BlueToothScanForm(QMap<QString, QBluetoothDeviceInfo> *device
     QStringList headers = { "Field", "Value"};
     ui->treeInfo->setHeaderLabels(headers);
     connect(ui->listDevices, &QListWidget::itemDoubleClicked, this, &BlueToothScanForm::onOpenDevice);
+    connect(ui->btnScan, &QPushButton::clicked, this, &BlueToothScanForm::onScanServices);
+    ui->scanProgress->setValue(0);
 }
 
 BlueToothScanForm::~BlueToothScanForm() {
@@ -51,6 +53,7 @@ void BlueToothScanForm::onOpenDevice(const QListWidgetItem *clicked) {
 }
 
 void BlueToothScanForm::loadDeviceData(QString const &id) {
+    ui->scanProgress->reset();
     ui->treeInfo->clear();
     ui->btnScan->setEnabled(true);
     _index[id]->setBackgroundColor(QColor(255,255,255,255));  //set it back to white so we know if new data arrives
@@ -127,4 +130,8 @@ void BlueToothScanForm::loadDeviceData(QString const &id) {
 
 void BlueToothScanForm::resize() {
     ui->treeInfo->resizeColumnToContents(0);
+}
+
+void BlueToothScanForm::onScanServices() {
+
 }

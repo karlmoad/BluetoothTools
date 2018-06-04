@@ -38,6 +38,7 @@ public:
 public slots:
     void onDeviceInformationAvailable(QString const &id);
     void onOpenDevice(const QListWidgetItem *clicked);
+    void onScanServices();
 
 private:
     Ui::BlueToothScanForm *ui;
