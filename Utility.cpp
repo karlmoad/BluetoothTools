@@ -15,3 +15,23 @@ const QString Utility::getDeviceId(QBluetoothDeviceInfo const &device) {
 #endif
 
 }
+
+QTreeWidgetItem* Utility::addTreeItem(QString const &name, QString const &value, QTreeWidget *tree, QTreeWidgetItem *parent) {
+
+    QTreeWidgetItem *item;
+
+    if(parent == nullptr) {
+        item = new QTreeWidgetItem(tree);
+        tree->addTopLevelItem(item);
+    }
+    else {
+
+        item = new QTreeWidgetItem();
+        parent->addChild(item);
+    }
+
+    item->setText(0, name);
+    item->setText(1,value);
+
+    return item;
+}

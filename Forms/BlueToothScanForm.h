@@ -49,6 +49,8 @@ private:
 
 
     void loadDeviceData(QString const &id);
+    void resize();
+
 
 
 };

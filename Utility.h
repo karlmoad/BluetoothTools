@@ -9,10 +9,12 @@
 #include <QBluetoothDeviceInfo>
 #include <QBluetoothUuid>
 #include <QBluetoothAddress>
+#include <QTreeWidgetItem>
 
 class Utility {
 public:
     static const QString getDeviceId(QBluetoothDeviceInfo const &device);
+    static QTreeWidgetItem* addTreeItem(QString const &name, QString const &value, QTreeWidget *tree = nullptr,QTreeWidgetItem *parent=nullptr);
 };
 
 

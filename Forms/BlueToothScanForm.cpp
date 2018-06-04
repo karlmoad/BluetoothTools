@@ -10,6 +10,10 @@ BlueToothScanForm::BlueToothScanForm(QMap<QString, QBluetoothDeviceInfo> *device
     _devices = devices;
     _rssi = rssi;
 
+    ui->btnScan->setIcon(QIcon(":/images/bluetooth_16.png"));
+    ui->btnScan->setEnabled(false);
+    QStringList headers = { "Field", "Value"};
+    ui->treeInfo->setHeaderLabels(headers);
     connect(ui->listDevices, &QListWidget::itemDoubleClicked, this, &BlueToothScanForm::onOpenDevice);
 }
 
@@ -47,5 +51,80 @@ void BlueToothScanForm::onOpenDevice(const QListWidgetItem *clicked) {
 }
 
 void BlueToothScanForm::loadDeviceData(QString const &id) {
-    _index[id]->setBackgroundColor(QColor(255,255,255,255));
+    ui->treeInfo->clear();
+    ui->btnScan->setEnabled(true);
+    _index[id]->setBackgroundColor(QColor(255,255,255,255));  //set it back to white so we know if new data arrives
+
+    QBluetoothDeviceInfo device = (*_devices)[id];
+
+    QBluetoothDeviceInfo::CoreConfigurations core = device.coreConfigurations();
+    QBluetoothDeviceInfo::ServiceClasses classes = device.serviceClasses();
+
+    Utility::addTreeItem("Address", Utility::getDeviceId(device), ui->treeInfo, nullptr);
+
+
+    //Configuration
+    QString configuration;
+
+    if(core.testFlag(QBluetoothDeviceInfo::CoreConfiguration::LowEnergyCoreConfiguration)) {
+        configuration.append(QString("%1%2").arg((configuration.length() > 0 ? ",":""),"BTLE"));
+    }
+
+    if(core.testFlag(QBluetoothDeviceInfo::CoreConfiguration::BaseRateCoreConfiguration)) {
+        configuration.append(QString("%1%2").arg((configuration.length() > 0 ? ",":""),"Standard"));
+    }
+
+    if(core.testFlag(QBluetoothDeviceInfo::CoreConfiguration::BaseRateAndLowEnergyCoreConfiguration)) {
+        configuration.append(QString("%1%2").arg((configuration.length() > 0 ? ",":""),"BTLE & Standard"));
+    }
+
+    if(configuration.length() == 0)
+        configuration = "Unknown";
+
+    Utility::addTreeItem("Configuration",configuration, ui->treeInfo, nullptr);
+
+    QString deviceClass;
+    //Major device class
+    switch(device.majorDeviceClass()) {
+        case QBluetoothDeviceInfo::MajorDeviceClass::MiscellaneousDevice:
+            deviceClass = "Miscellaneous";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::AudioVideoDevice:
+            deviceClass = "Audio/Video";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::ComputerDevice:
+            deviceClass = "Computer";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::HealthDevice:
+            deviceClass = "Health";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::ImagingDevice:
+            deviceClass = "Imaging";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::LANAccessDevice:
+            deviceClass = "LAN Access";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::PeripheralDevice:
+            deviceClass = "Peripheral";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::PhoneDevice:
+            deviceClass = "Phone";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::ToyDevice:
+            deviceClass = "Toy";
+            break;
+        case QBluetoothDeviceInfo::MajorDeviceClass::WearableDevice:
+            deviceClass = "Wearable";
+            break;
+        default:
+            deviceClass = "Unspecified";
+            break;
+    }
+
+    Utility::addTreeItem("Device Class", deviceClass, ui->treeInfo, nullptr);
+    resize();
+}
+
+void BlueToothScanForm::resize() {
+    ui->treeInfo->resizeColumnToContents(0);
 }
