@@ -27,7 +27,7 @@ void BlueToothScanForm::onDeviceInformationAvailable(QString const &id) {
 
     if(_index.contains(id)) {
         if(id.compare(_currentDeviceIdentifier,Qt::CaseSensitive) ==0) {
-            loadDeviceData(id);
+            loadRSSIData(id);
         }
         else {
             _index[id]->setBackgroundColor(QColor(0,255,0,75));
@@ -58,6 +58,7 @@ void BlueToothScanForm::loadDeviceData(QString const &id) {
     ui->btnScan->setEnabled(true);
     _index[id]->setBackgroundColor(QColor(255,255,255,255));  //set it back to white so we know if new data arrives
 
+    loadRSSIData(id);
     QBluetoothDeviceInfo device = (*_devices)[id];
 
     QBluetoothDeviceInfo::CoreConfigurations core = device.coreConfigurations();
@@ -134,4 +135,30 @@ void BlueToothScanForm::resize() {
 
 void BlueToothScanForm::onScanServices() {
 
+}
+
+void BlueToothScanForm::loadRSSIData(QString const &id) {
+
+    if(_rssi->contains(id)) {
+        ui->tableRSSI->clear();
+
+        QList<RSSIData> rssi = (*_rssi)[id];
+        ui->tableRSSI->setColumnCount(2);
+        ui->tableRSSI->setRowCount(rssi.size());
+        ui->tableRSSI->setHorizontalHeaderLabels({"Epoch","RSSI"});
+        ui->tableRSSI->verticalHeader()->hide();
+        ui->tableRSSI->setShowGrid(true);
+
+        for(int i=0; i< rssi.size(); i++) {
+            QTableWidgetItem *itemEpoch  = new QTableWidgetItem(QString::number(rssi[i].epoch));
+            QTableWidgetItem *itemRSSI = new QTableWidgetItem(QString::number(rssi[i].rssi));
+
+            ui->tableRSSI->setItem(i,0,itemEpoch);
+            ui->tableRSSI->setItem(i,1,itemRSSI);
+        }
+
+
+        ui->tableRSSI->resizeColumnToContents(0);
+        ui->tableRSSI->resizeColumnToContents(1);
+    }
 }

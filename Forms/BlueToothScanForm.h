@@ -50,6 +50,7 @@ private:
 
 
     void loadDeviceData(QString const &id);
+    void loadRSSIData(QString const &id);
     void resize();
 
 
