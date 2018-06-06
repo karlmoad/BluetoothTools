@@ -156,7 +156,7 @@ void BlueToothScanForm::loadRSSIData(QString const &id) {
             ui->tableRSSI->setItem(i,0,itemEpoch);
             ui->tableRSSI->setItem(i,1,itemRSSI);
         }
-        
+
         ui->tableRSSI->resizeColumnToContents(0);
         ui->tableRSSI->resizeColumnToContents(1);
     }

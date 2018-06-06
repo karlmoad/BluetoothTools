@@ -66,7 +66,7 @@ private:
     QActionGroup *m_scanTypeGroup;
 
     BlueToothScanForm *_mainForm;
-    ScanType _current = ScanType::NONE;
+    ScanType _current = ScanType::LE;
     bool _scanning = false;
 
     QBluetoothDeviceDiscoveryAgent *_agent;
