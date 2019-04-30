@@ -15,7 +15,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTORCC ON)
 
-find_package(Qt5 COMPONENTS Core Widgets Bluetooth REQUIRED)
+find_package(Qt5 5.12 COMPONENTS Core Widgets Bluetooth REQUIRED)
 
 add_executable(BluetoothTools MACOSX_BUNDLE main.cpp
                                 resources.qrc
